@@ -20,7 +20,7 @@ async def create_request(label=None, max_pages: int = 15, request_id: str = None
     if request_id in scrapper_data:
         return JSONResponse(content={"Error": "Request ID Already Exists"}, status_code=409)
 
-    if website.lower in websites:
+    if website.lower() in websites:
         request_id = start_scrapp(label, max_pages, request_id, website)
         content = {"request_id": request_id,
                    "status_url": f"scrapper/{request_id}/status",
