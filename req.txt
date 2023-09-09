@@ -1,4 +1,3 @@
-annotated-typesmrp
 anyiomrp
 attrsmrp
 certifimrp
