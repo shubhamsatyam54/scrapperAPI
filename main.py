@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 from scrappers import *
+import requests
+import json
 
-app = FastAPI()
+app = FastAPI(title="Webscrapper By SSD")
 
 websites = ["myntra"]
 
@@ -97,6 +99,45 @@ async def get_data(request_id, page: int = 1):
         content = {"Error": "Request ID : Does not exist"}
         return JSONResponse(content=content, status_code=404)
 
+@app.get("/scrapper/{request_id}/senddata")
+async def get_data(request_id, page: int = 1):
+    """
+    An End-point to see the data of request
+    """
+    #print("a")
+    page_length = 10
+    if request_id in scrapper_data:
+        full_data = scrapper_data[request_id]['data']
+        data_points = len(full_data)
+        total_pages = (data_points // page_length) + (1 if data_points % page_length != 0 else 0)
+        if page < 1 or page > total_pages:
+            content = {"Error": "Wrong Page Number Entered"}
+            return JSONResponse(content=content, status_code=404)
+        page_data = full_data[page_length * (page - 1):page_length * page]
+        content = {
+            'request_id': request_id,
+            'website': scrapper_data[request_id]['website'],
+            'label': scrapper_data[request_id]['label'],
+            'current_page': page,
+            'total_pages': total_pages if total_pages != 0 else 1,
+            'data': page_data,
+
+        }
+        json_content = json.dumps(content)
+        #print(json_content)
+        #print("m")
+        try:
+            #url=f"https://jholashop.com/scrappy-data?data={json_content}"
+            url = f"https://jholashop.com/scrappy-data"
+            status = requests.post(url,json=content).status_code
+            print(status)
+        except Exception as e:
+            print(e)
+        return JSONResponse(content=content, status_code=200)
+    else:
+        content = {"Error": "Request ID : Does not exist"}
+        return JSONResponse(content=content, status_code=404)
+
 
 @app.get("/scrapper/product")
 async def get_single_product_data(website: str = None, url=None, ):
@@ -148,3 +189,9 @@ async def get_single_product_data(website: str = None, url=None, ):
 #     else:
 #         content = {"Error": "Request ID : Does not exist"}
 #         return JSONResponse(content=content, status_code=404)
+
+
+@app.get("/scrapper/receive")
+async def send_data(data={}):
+    print(len(data))
+    return JSONResponse({"status":"received"},status_code=200)
