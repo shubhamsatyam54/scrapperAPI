@@ -1,3 +1,4 @@
+import json
 import re
 import threading
 from time import sleep
@@ -7,14 +8,16 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-scrapper_data = {}
-
+file = open('offline_data.json', 'r')
+scrapper_data = json.load(file)
+threads = {}
 
 def myntra_single_product_scrapper(url):
-
     service = Service()
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    options.add_argument("--no-sandbox")
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
     user_agent = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 '
                   'Safari/537.36')
     options.add_argument(f'user-agent={user_agent}')
@@ -40,7 +43,8 @@ def myntra_single_product_scrapper(url):
             product_data["brand"] = None
 
         product_rating_selector = ("#mountRoot > div > div:nth-child(1) > main > div.pdp-details.common-clearfix > "
-                                   "div.pdp-description-container > div.pdp-price-info > div > div > div > div:nth-child("
+                                   "div.pdp-description-container > div.pdp-price-info > div > div > div > "
+                                   "div:nth-child("
                                    "1)")
         product_rating_element = driver.find_elements(By.CSS_SELECTOR, product_rating_selector)
         if len(product_rating_element) > 0:
@@ -49,9 +53,10 @@ def myntra_single_product_scrapper(url):
         else:
             product_data["star_Rating"] = None
 
-        product_rating_count_selector = ("#mountRoot > div > div:nth-child(1) > main > div.pdp-details.common-clearfix > "
-                                         "div.pdp-description-container > div.pdp-price-info > div > div > div > "
-                                         "div.index-ratingsCount")
+        product_rating_count_selector = (
+            "#mountRoot > div > div:nth-child(1) > main > div.pdp-details.common-clearfix > "
+            "div.pdp-description-container > div.pdp-price-info > div > div > div > "
+            "div.index-ratingsCount")
         product_rating_count_element = driver.find_elements(By.CSS_SELECTOR, product_rating_count_selector)
         if len(product_rating_count_element) > 0:
             product_rating_count = re.search(r"\d+", product_rating_count_element[0].text.lower())
@@ -76,7 +81,9 @@ def myntra_single_product_scrapper(url):
         else:
             product_data["price"] = None
 
-        product_mrp_selector = "#mountRoot > div > div:nth-child(1) > main > div.pdp-details.common-clearfix > div.pdp-description-container > div.pdp-price-info > div > p.pdp-discount-container > span.pdp-mrp > s"
+        product_mrp_selector = ("#mountRoot > div > div:nth-child(1) > main > div.pdp-details.common-clearfix > "
+                                "div.pdp-description-container > div.pdp-price-info > div > p.pdp-discount-container "
+                                "> span.pdp-mrp > s")
         product_mrp_element = driver.find_elements(By.CSS_SELECTOR, product_mrp_selector)
         if len(product_mrp_element) > 0:
             product_mrp = product_mrp_element[0]
@@ -113,8 +120,7 @@ def myntra_single_product_scrapper(url):
             else:
                 product_description_data["description"] = None
 
-            product_size_fits_element = product_description_element[0].find_elements(By.CLASS_NAME,
-                                                                                     "pdp-sizeFitDesc")
+            product_size_fits_element = product_description_element[0].find_elements(By.CLASS_NAME, "pdp-sizeFitDesc")
             if len(product_size_fits_element) > 0:
                 for product_size_fit in product_size_fits_element:
                     key = product_size_fit.find_elements(By.CLASS_NAME, "pdp-sizeFitDescTitle")[0].text.lower()
@@ -123,9 +129,7 @@ def myntra_single_product_scrapper(url):
 
             specifications_data = {}
             specifications = product_description_element[0].find_elements(By.CLASS_NAME, "index-tableContainer")[
-                0].find_elements(
-                By.CLASS_NAME,
-                "index-row")
+                0].find_elements(By.CLASS_NAME, "index-row")
             if len(specifications) > 0:
                 for specification in specifications:
                     key = specification.find_elements(By.CLASS_NAME, "index-rowKey")[0].text.lower()
@@ -148,12 +152,9 @@ def myntra_single_product_scrapper(url):
             sizes = [container.find_element(By.TAG_NAME, "p").text.lower() for container in
                      size_button_sub_container.find_elements(By.CLASS_NAME, "size-buttons-tipAndBtnContainer")]
 
-            parsed_sizes = [
-                {"size": size_price.split('\n')[0], "price": size_price.split('\n')[1]}
-                if '\n' in size_price
-                else size_price
-                for size_price in sizes
-            ]
+            parsed_sizes = [{"size": size_price.split('\n')[0],
+                             "price": size_price.split('\n')[1]} if '\n' in size_price else size_price for size_price in
+                sizes]
             product_data["sizes"] = parsed_sizes
 
         else:
@@ -169,11 +170,11 @@ def myntra_single_product_scrapper(url):
     except:
         return None
     driver.quit()
+
     return product_data
 
 
-def myntra_image_scrapp(label=None,
-                        max_pages=15, request_id=None):
+def myntra_image_scrapp(label=None, max_pages=15, request_id=None):
     print("started")
     service = Service()
     options = webdriver.ChromeOptions()
@@ -299,9 +300,7 @@ def myntra_image_scrapp(label=None,
 
                 specifications_data = {}
                 specifications = product_description_element[0].find_elements(By.CLASS_NAME, "index-tableContainer")[
-                    0].find_elements(
-                    By.CLASS_NAME,
-                    "index-row")
+                    0].find_elements(By.CLASS_NAME, "index-row")
                 if len(specifications) > 0:
                     for specification in specifications:
                         key = specification.find_elements(By.CLASS_NAME, "index-rowKey")[0].text.lower()
@@ -324,12 +323,9 @@ def myntra_image_scrapp(label=None,
                 sizes = [container.find_element(By.TAG_NAME, "p").text.lower() for container in
                          size_button_sub_container.find_elements(By.CLASS_NAME, "size-buttons-tipAndBtnContainer")]
 
-                parsed_sizes = [
-                    {"size": size_price.split('\n')[0], "price": size_price.split('\n')[1]}
-                    if '\n' in size_price
-                    else size_price
-                    for size_price in sizes
-                ]
+                parsed_sizes = [{"size": size_price.split('\n')[0],
+                                 "price": size_price.split('\n')[1]} if '\n' in size_price else size_price for
+                    size_price in sizes]
                 product_data["sizes"] = parsed_sizes
 
             else:
@@ -348,6 +344,8 @@ def myntra_image_scrapp(label=None,
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
         scrapper_data[request_id]["scraped_pages"] = p + 1
+        with open('offline_data.json', 'w') as file:
+            json.dump(scrapper_data, file, indent=4)
         next_btn = driver.find_elements(By.CSS_SELECTOR,
                                         "#desktopSearchResults > div.search-searchProductsContainer.row-base > section > div.results-showMoreContainer > ul > li.pagination-next > a")
         if len(next_btn) == 0:
@@ -359,20 +357,12 @@ def myntra_image_scrapp(label=None,
 
 
 def start_scrapp(label, max_pages, request_id, website):
-    request_id = 'req' + str(len(scrapper_data) + 1)
-    scrapper_data[request_id] = {
-        'data': [],
-        'website': website,
-        'thread_id': None,
-        'label': label,
-        'scraped_pages': 0,
-        'scrapping_page': 0,
-        'max_pages': max_pages
-    }
+    scrapper_data[request_id] = {'data': [], 'website': website, 'label': label, 'scraped_pages': 0,
+        'scrapping_page': 0, 'max_pages': max_pages}
 
     if website.lower() == "myntra":
         task = threading.Thread(target=myntra_image_scrapp, args=(label, max_pages, request_id,))
-        scrapper_data[request_id]['thread'] = task
+        threads[request_id] = task
         task.start()
 
     return request_id
