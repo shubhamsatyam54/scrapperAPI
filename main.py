@@ -76,7 +76,7 @@ async def get_data(request_id, page: int = 1):
     """
     An End-point to see the data of request
     """
-    page_length = 50
+    page_length = 10
     if request_id in scrapper_data:
         full_data = scrapper_data[request_id]['data']
         data_points = len(full_data)

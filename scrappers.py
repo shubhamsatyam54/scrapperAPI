@@ -200,6 +200,7 @@ def myntra_image_scrapp(label=None, max_pages=15, request_id=None):
         print(f"page : {p + 1} - products : {len(no_product_boxs)}")
         for i in range(1, len(no_product_boxs) + 1):
             counter+=1
+            print(counter)
             product_data = {}
             selector = f"#desktopSearchResults > div.search-searchProductsContainer.row-base > section > ul > li:nth-child({i}) > a"
             product_url = driver.find_element(By.CSS_SELECTOR, selector).get_attribute("href")
@@ -347,22 +348,24 @@ def myntra_image_scrapp(label=None, max_pages=15, request_id=None):
 
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
+            if counter % 10 == 0:
+                send_page = counter // 10
+                url = f"http://localhost:8000/scrapper/{request_id}/senddata?page={send_page}"
+                requests.get(url)
         scrapper_data[request_id]["scraped_pages"] = p + 1
         with open('offline_data.json', 'w') as file:
             json.dump(scrapper_data, file, indent=4)
         next_btn = driver.find_elements(By.CSS_SELECTOR,
                                         "#desktopSearchResults > div.search-searchProductsContainer.row-base > section > div.results-showMoreContainer > ul > li.pagination-next > a")
-        if counter%10==0:
-            send_page = counter//10
-            url = f"http://localhost:8000/scrapper/{request_id}/senddata?page={send_page}"
-            requests.get(url)
+
         if len(next_btn) == 0:
             break
         else:
             next_btn[0].send_keys(Keys.ENTER)
         sleep(5)
+
     if counter % 10 != 0:
-        send_page = (counter // 10) +1
+        send_page = (counter // 10) + 1
         url = f"http://localhost:8000/scrapper/{request_id}/senddata?page={send_page}"
         requests.get(url)
     driver.quit()
