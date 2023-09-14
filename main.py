@@ -5,7 +5,7 @@ from scrappers import *
 import requests
 import json
 
-app = FastAPI(title="Webscrapper By SSD")
+app = FastAPI(title="Webscrapper")
 
 websites = ["myntra"]
 
