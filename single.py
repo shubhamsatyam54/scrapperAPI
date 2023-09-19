@@ -107,8 +107,10 @@ def myntra_single_product_scrapper(url):
         else:
             product_data["sizes"] = None
 
+
     except:
+        myntra_driver.quit()
         return None
 
-
+    myntra_driver.quit()
     return product_data
