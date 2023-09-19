@@ -11,8 +11,8 @@ from selenium.webdriver.common.keys import Keys
 
 service = Service()
 options = webdriver.ChromeOptions()
-options.add_argument("--proxy=http://rxagjoeb-rotate:ce9jutub96sj@p.webshare.io:80/")
-#options.add_extension("proxy_auth_plugin.zip")
+#options.add_argument("--proxy=http://rxagjoeb-rotate:ce9jutub96sj@p.webshare.io:80/")
+options.add_extension("proxy_auth_plugin.zip")
 options.add_argument("--no-sandbox")
 options.add_argument("--headless=new")
 options.add_argument("--disable-gpu")

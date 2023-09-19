@@ -1,8 +1,8 @@
 import zipfile
 # Set your proxy server, port, username, and password
-proxy_server = "p.webshare.io"
-proxy_port = "80"
-proxy_username = "rxagjoeb-rotate"
+proxy_server = "185.199.229.156"
+proxy_port = "7492"
+proxy_username = "rxagjoeb"
 proxy_password = "ce9jutub96sj"
 manifest_json = """
 {
