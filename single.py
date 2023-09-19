@@ -11,8 +11,10 @@ from selenium.webdriver.common.keys import Keys
 
 service = Service()
 options = webdriver.ChromeOptions()
+options.add_argument("--proxy=http://rxagjoeb-rotate:ce9jutub96sj@p.webshare.io:80/")
+#options.add_extension("proxy_auth_plugin.zip")
 options.add_argument("--no-sandbox")
-options.add_argument("--headless")
+options.add_argument("--headless=new")
 options.add_argument("--disable-gpu")
 user_agent = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 '
               'Safari/537.36')
@@ -24,6 +26,7 @@ myntra_driver = webdriver.Chrome(service=service, options=options)
 def myntra_single_product_scrapper(url):
 
     myntra_driver.get(url)
+    #print(myntra_driver.page_source)
     try:
         product_data = {"product_URL": url}
         #html = myntra_driver.find_element(By.TAG_NAME, 'html')
