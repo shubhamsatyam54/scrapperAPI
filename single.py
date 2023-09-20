@@ -23,7 +23,7 @@ def myntra_single_product_scrapper(url):
     options.add_argument('--window-size=1920,1080')
     myntra_driver = webdriver.Chrome(service=service, options=options)
     myntra_driver.get(url)
-    #print(myntra_driver.page_source)
+    print(myntra_driver.page_source)
     try:
         product_data = {"product_URL": url}
         #html = myntra_driver.find_element(By.TAG_NAME, 'html')

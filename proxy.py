@@ -1,9 +1,9 @@
 import zipfile
 # Set your proxy server, port, username, and password
-proxy_server = "185.199.229.156"
-proxy_port = "7492"
-proxy_username = "rxagjoeb"
-proxy_password = "ce9jutub96sj"
+proxy_server = "brd.superproxy.io"
+proxy_port = "22225"
+proxy_username = "brd-customer-hl_cab77d8a-zone-residential"
+proxy_password = "agajhf0mq5mh"
 manifest_json = """
 {
     "version": "1.0.0",
