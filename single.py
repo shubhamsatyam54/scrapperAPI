@@ -12,8 +12,11 @@ from selenium.webdriver.common.keys import Keys
 def myntra_single_product_scrapper(url):
     service = Service()
     options = webdriver.ChromeOptions()
-    # options.add_argument("--proxy=http://rxagjoeb:ce9jutub96sj@185.199.229.156:7492/")
-    options.add_extension("proxy_auth_plugin.zip")
+    options.add_argument("--proxy=http://95ce3caaf58d4e58a29dec8d5763d2fa:@proxy.crawlera.com:8011/")
+    certificate_path = "zyte-proxy-ca.crt"
+    options.add_argument(f'--cert-path={certificate_path}')
+    options.add_argument('--ignore-certificate-errors')
+    # options.add_extension("proxy_auth_plugin.zip")
     options.add_argument("--no-sandbox")
     options.add_argument("--headless=new")
     options.add_argument("--disable-gpu")
