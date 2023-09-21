@@ -193,5 +193,21 @@ async def get_single_product_data(website: str = None, url=None, ):
 
 @app.get("/scrapper/receive")
 async def send_data(data={}):
+    # Specify the file path
+    file_path = 'your_file.txt'  # Replace 'your_file.txt' with the actual file path
+
+    try:
+        # Open the file in read mode
+        with open(file_path, 'r') as file:
+            # Read the contents of the file
+            file_contents = file.read()
+
+            # Print the contents
+            print(file_contents)
+    except FileNotFoundError:
+        print(f"File '{file_path}' not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
     print(len(data))
     return JSONResponse({"status":"received"},status_code=200)

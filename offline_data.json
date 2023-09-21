@@ -1,1 +1,25 @@
-{}
+{
+    "shoesa": {
+        "data": [
+            {
+                "product_URL": "https://www.myntra.com/sports-shoes/hrx+by+hrithik+roshan/hrx-by-hrithik-roshan-men-icon-running-shoess/16201330/buy",
+                "title": null,
+                "brand": null,
+                "star_Rating": null,
+                "number_of_Ratings": null,
+                "review_Page_URL": null,
+                "number_of_Reviews": null,
+                "price": null,
+                "mrp": null,
+                "other_available_colors": null,
+                "description": null,
+                "sizes": null
+            }
+        ],
+        "website": "myntra",
+        "label": "shoes1",
+        "scraped_pages": 1,
+        "scrapping_page": 1,
+        "max_pages": 2
+    }
+}
