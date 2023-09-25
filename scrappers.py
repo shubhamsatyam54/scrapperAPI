@@ -194,10 +194,10 @@ def myntra_image_scrapp(label=None, max_pages=15, request_id=None):
     options.add_argument(f'user-agent={user_agent}')
     options.add_argument('--window-size=1920,1080')
     driver = webdriver.Firefox(service=service, options=options)
-    driver.get("https://www.myntra.com/")
-    search_bar = driver.find_element(By.CLASS_NAME, "desktop-searchBar")
-    search_bar.send_keys(label)
-    search_bar.send_keys(Keys.ENTER)
+    driver.get(f"https://www.myntra.com/rawquery={label}")
+    #search_bar = driver.find_element(By.CLASS_NAME, "desktop-searchBar")
+    #search_bar.send_keys(label)
+    #search_bar.send_keys(Keys.ENTER)
     max_no_of_pages = max_pages
     counter = 0
     for p in range(max_no_of_pages):
