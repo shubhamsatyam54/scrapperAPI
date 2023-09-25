@@ -11,26 +11,24 @@ from selenium.webdriver.common.keys import Keys
 
 def myntra_single_product_scrapper(url):
     service = Service()
-    options = webdriver.ChromeOptions()
-    options.add_argument("--proxy=http://95ce3caaf58d4e58a29dec8d5763d2fa:@proxy.crawlera.com:8011/")
-    certificate_path = "zyte-proxy-ca.crt"
-    options.add_argument(f'--cert-path={certificate_path}')
-    options.add_argument('--ignore-certificate-errors')
-    # options.add_extension("proxy_auth_plugin.zip")
+    service = Service()
+    HEADLESS_PROXY = "localhost:3128"
+    webdriver.DesiredCapabilities.FIREFOX['proxy'] = {
+        "httpProxy": HEADLESS_PROXY,
+        "sslProxy": HEADLESS_PROXY,
+        "proxyType": "manual",
+    }
+    options = webdriver.FirefoxOptions()
     options.add_argument("--no-sandbox")
-    options.add_argument("--headless=new")
-    options.add_argument("--disable-gpu")
-    user_agent = ('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 '
-                  'Safari/537.36')
+    options.add_argument("--headless")
+    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
     options.add_argument(f'user-agent={user_agent}')
     options.add_argument('--window-size=1920,1080')
-    myntra_driver = webdriver.Chrome(service=service, options=options)
+    myntra_driver = webdriver.Firefox(service=service, options=options)
     myntra_driver.get(url)
     print(myntra_driver.page_source)
     try:
         product_data = {"product_URL": url}
-        #html = myntra_driver.find_element(By.TAG_NAME, 'html')
-        #html.send_keys(Keys.END)
         product_title_element = myntra_driver.find_elements(By.CLASS_NAME, "pdp-name")
         if len(product_title_element) > 0:
             product_title = product_title_element[0]

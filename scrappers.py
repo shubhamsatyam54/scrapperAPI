@@ -181,20 +181,19 @@ threads = {}
 def myntra_image_scrapp(label=None, max_pages=15, request_id=None):
     print("started")
     service = Service()
-    options = webdriver.ChromeOptions()
-    options.add_argument("--proxy=http://95ce3caaf58d4e58a29dec8d5763d2fa:@proxy.crawlera.com:8011/")
-    certificate_path = "zyte-proxy-ca.crt"
-    options.add_argument(f'--cert-path={certificate_path}')
-    options.add_argument('--ignore-certificate-errors')
-    #options.add_extension("proxy_auth_plugin.zip")
+    HEADLESS_PROXY = "localhost:3128"
+    webdriver.DesiredCapabilities.FIREFOX['proxy'] = {
+        "httpProxy": HEADLESS_PROXY,
+        "sslProxy": HEADLESS_PROXY,
+        "proxyType": "manual",
+    }
+    options = webdriver.FirefoxOptions()
     options.add_argument("--no-sandbox")
-    options.add_argument("--headless=new")
-    options.add_argument("--disable-gpu")
+    options.add_argument("--headless")
     user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
     options.add_argument(f'user-agent={user_agent}')
-    # Run Chrome in headless mode
     options.add_argument('--window-size=1920,1080')
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Firefox(service=service, options=options)
     driver.get("https://www.myntra.com/")
     search_bar = driver.find_element(By.CLASS_NAME, "desktop-searchBar")
     search_bar.send_keys(label)
