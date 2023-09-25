@@ -26,7 +26,7 @@ def myntra_single_product_scrapper(url):
     options.add_argument('--window-size=1920,1080')
     myntra_driver = webdriver.Firefox(service=service, options=options)
     myntra_driver.get(url)
-    print(myntra_driver.page_source)
+    #print(myntra_driver.page_source)
     try:
         product_data = {"product_URL": url}
         product_title_element = myntra_driver.find_elements(By.CLASS_NAME, "pdp-name")
